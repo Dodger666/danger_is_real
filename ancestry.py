@@ -111,12 +111,12 @@ class Human(Ancestry):
                 " or self-sacrifice to pass any check (GM fiat). Injuries still apply."
         }
         self.roll_table: Dict = {
-            Ability.STR: "3d6",
-            Ability.CON: "3d6",
-            Ability.DEX: "3d6",
-            Ability.INT: "3d6",
-            Ability.WIS: "3d6",
-            Ability.CHA: "3d6",
+            Ability.STR.name: "3d6",
+            Ability.CON.name: "3d6",
+            Ability.DEX.name: "3d6",
+            Ability.INT.name: "3d6",
+            Ability.WIS.name: "3d6",
+            Ability.CHA.name: "3d6",
         }
 
     def set_best_ability(self, best_ability: Ability):

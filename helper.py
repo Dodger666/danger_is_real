@@ -15,7 +15,6 @@ class Ability(Enum):
 
 
 def generate_abilities(roll_table: Dict):
-    AbilityValues = namedtuple('AbilityValues', 'score mod')
     result = {
             Ability.STR.name: None,
             Ability.CON.name: None,
@@ -27,7 +26,7 @@ def generate_abilities(roll_table: Dict):
     for key, val in roll_table.items():
         score = sum(dice.roll(val))
         mod = math.floor((score - 10) / 2) if score > 1 else -4
-        result[key.name] = AbilityValues(score, mod)
+        result[key] = {'score': score, 'mod': mod}
     return result
 
 

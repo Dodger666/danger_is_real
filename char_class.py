@@ -16,7 +16,7 @@ class Warrior(Class):
         self.hit_dice = "1d10"
         self.armor_allowed = "all"
         self.weapons_proficient = "all"
-        self.abilities_proficient = [Ability.STR, Ability.CON]
+        self.abilities_proficient = [Ability.STR.name, Ability.CON.name]
         self.checks_proficient = "Coordination, tactics, will, archetype"
         self.equipments = ["Armor of your choice",
                            "Shield",
@@ -36,7 +36,7 @@ class Zealot(Class):
         self.hit_dice = "1d8"
         self.armor_allowed = "all"
         self.weapons_proficient = "simple"
-        self.abilities_proficient = [Ability.WIS, Ability.CHA]
+        self.abilities_proficient = [Ability.WIS.name, Ability.CHA.name]
         self.checks_proficient = "Spellcasting, history, insight, archetype"
         self.equipments = ["Armor of your choice",
                            "Shield",
@@ -55,7 +55,7 @@ class Mage(Class):
         self.hit_dice = "1d6"
         self.armor_allowed = "Shields"
         self.weapons_proficient = "simple"
-        self.abilities_proficient = [Ability.CON, Ability.INT]
+        self.abilities_proficient = [Ability.CON.name, Ability.INT.name]
         self.checks_proficient = "Spellcasting, finesse, negotiation, archetype"
         self.equipments = ["Potionery glassware",
                            "Shield or hunting bow",
@@ -75,7 +75,7 @@ class Thief(Class):
         self.hit_dice = "1d6"
         self.armor_allowed = "light, shield"
         self.weapons_proficient = "all"
-        self.abilities_proficient = [Ability.DEX, Ability.INT]
+        self.abilities_proficient = [Ability.DEX.name, Ability.INT.name]
         self.checks_proficient = "Stealth, deception, senses, tools, archetype"
         self.equipments = ["Light armor",
                            "2 one handed weapons",
@@ -95,7 +95,7 @@ class ElfParagon(Class):
         self.hit_dice = "1d6"
         self.armor_allowed = "light, shield"
         self.weapons_proficient = "simple, war bow"
-        self.abilities_proficient = [Ability.STR, Ability.INT]
+        self.abilities_proficient = [Ability.STR.name, Ability.INT.name]
         self.checks_proficient = "Stealth, senses, arcane, archetype"
         self.equipments = ["Light armor",
                            "Shield",
@@ -117,7 +117,7 @@ class HalflingParagon(Class):
         self.hit_dice = "1d8"
         self.armor_allowed = "light, shield"
         self.weapons_proficient = "simple"
-        self.abilities_proficient = [Ability.DEX, Ability.CHA]
+        self.abilities_proficient = [Ability.DEX.name, Ability.CHA.name]
         self.checks_proficient = "Stealth, haggling, will- power, archetype"
         self.equipments = ["Light armor",
                            "Shield",
@@ -138,7 +138,7 @@ class DwarfParagon(Class):
         self.hit_dice = "1d10"
         self.armor_allowed = "all"
         self.weapons_proficient = "all"
-        self.abilities_proficient = [Ability.CON, Ability.WIS]
+        self.abilities_proficient = [Ability.CON.name, Ability.WIS.name]
         self.checks_proficient = "Mountain, athletics, diplomacy, archetype"
         self.equipments = ["Armor of your choice",
                            "3 weapons",
