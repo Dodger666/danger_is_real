@@ -1,7 +1,7 @@
-from ancestry import Ancestry
+from logic.ancestry import Ancestry
 from typing import Dict
 import helper
-from char_class import Class
+from logic.char_class import Class
 
 
 class Character:

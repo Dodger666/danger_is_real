@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Dict
 
+from fastapi import HTTPException
+
 from helper import Ability
 
 
@@ -10,7 +12,7 @@ class Ancestry(ABC):
         self.roll_table: Dict = {}
 
     @abstractmethod
-    def set_best_ability(self, best_ability: Ability):
+    def set_best_ability(self, best_ability: str):
         pass
 
 
@@ -29,15 +31,15 @@ class Halfling(Ancestry):
                 "(+hiding, -lifting, +balance, -intimidation). If the GM is unsure, ignore."
         }
         self.roll_table: Dict = {
-            Ability.STR: "5d6m3",
-            Ability.CON: "5d6m3",
-            Ability.DEX: "5d6m3",
-            Ability.INT: "5d6m3",
-            Ability.WIS: "4d6h3",
-            Ability.CHA: "4d6h3",
+            Ability.STR.name: "5d6m3",
+            Ability.CON.name: "5d6m3",
+            Ability.DEX.name: "5d6m3",
+            Ability.INT.name: "5d6m3",
+            Ability.WIS.name: "4d6h3",
+            Ability.CHA.name: "4d6h3",
         }
 
-    def set_best_ability(self, best_ability: Ability):
+    def set_best_ability(self, best_ability: str):
         pass
 
 
@@ -57,15 +59,15 @@ class Dwarf(Ancestry):
                 "Stone sings to you but you fear open water."
         }
         self.roll_table: Dict = {
-            Ability.STR: "4d6h3",
-            Ability.CON: "4d6h3",
-            Ability.DEX: "5d6m3",
-            Ability.INT: "5d6m3",
-            Ability.WIS: "5d6m3",
-            Ability.CHA: "5d6m3",
+            Ability.STR.name: "4d6h3",
+            Ability.CON.name: "4d6h3",
+            Ability.DEX.name: "5d6m3",
+            Ability.INT.name: "5d6m3",
+            Ability.WIS.name: "5d6m3",
+            Ability.CHA.name: "5d6m3",
         }
 
-    def set_best_ability(self, best_ability: Ability):
+    def set_best_ability(self, best_ability: str):
         pass
 
 
@@ -85,15 +87,15 @@ class Elf(Ancestry):
                 " but reduce your max RES by 1 per day you don’t see the moon."
         }
         self.roll_table: Dict = {
-            Ability.STR: "5d6m3",
-            Ability.CON: "5d6m3",
-            Ability.DEX: "4d6h3",
-            Ability.INT: "4d6h3",
-            Ability.WIS: "5d6m3",
-            Ability.CHA: "5d6m3",
+            Ability.STR.name: "5d6m3",
+            Ability.CON.name: "5d6m3",
+            Ability.DEX.name: "4d6h3",
+            Ability.INT.name: "4d6h3",
+            Ability.WIS.name: "5d6m3",
+            Ability.CHA.name: "5d6m3",
         }
 
-    def set_best_ability(self, best_ability: Ability):
+    def set_best_ability(self, best_ability: str):
         pass
 
 
@@ -119,5 +121,9 @@ class Human(Ancestry):
             Ability.CHA.name: "3d6",
         }
 
-    def set_best_ability(self, best_ability: Ability):
-        self.roll_table[best_ability] = "4d6h3"
+    def set_best_ability(self, best_ability: str):
+        try:
+            best_a = Ability[best_ability.upper()]
+        except:
+            raise HTTPException(status_code=400, detail=f"best ability {best_ability.upper()} invalid")
+        self.roll_table[best_a.name] = "4d6h3"
