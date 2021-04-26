@@ -1,19 +1,23 @@
-from enum import Enum
-
 from fastapi import APIRouter
-
-from helper import ClassName, Ability
-from logic import factory
-from logic.character import Character
+from fastapi.responses import Response
+from helper import ClassName, Ability, create_pdf
+from model import factory
+from model.character import Character
 
 router = APIRouter()
 
 
 @router.get("/characters/generate/{a_class}/{name}")
-def get_generate(a_class: ClassName, name: str, best_roll_ability: Ability = 'CHA'):
+def get_generate(a_class: ClassName, name: str, best_roll_ability: Ability = 'CHA', as_pdf: bool = False):
 
     char_class, race = factory.get_class(a_class)
     c = Character(char_class, race)
     c.ancestry.set_best_ability(best_roll_ability)
     c.generate(name=name)
+    if as_pdf:
+        output = create_pdf(c)
+        headers = {
+            'Content-Disposition': f'attachment; filename=FTD_sheet_{name}.pdf'
+        }
+        return Response(output.getvalue(), headers=headers)
     return c

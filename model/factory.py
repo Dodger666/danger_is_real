@@ -1,7 +1,6 @@
 from fastapi import HTTPException
-
-from logic.ancestry import Human, Elf, Dwarf, Halfling
-from logic.char_class import Warrior, Thief, Zealot, Mage, ElfParagon, DwarfParagon, HalflingParagon
+from model.ancestry import Human, Elf, Dwarf, Halfling
+from model.char_class import Warrior, Thief, Zealot, Mage, ElfParagon, DwarfParagon, HalflingParagon
 
 
 def get_class(a_class: str):

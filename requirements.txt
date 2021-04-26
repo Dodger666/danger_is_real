@@ -3,3 +3,5 @@ fastapi
 uvicorn
 uvloop
 httptools
+pdfrw
+aiofiles

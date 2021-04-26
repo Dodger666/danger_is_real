@@ -1,8 +1,9 @@
 import math
-from collections import namedtuple
 from enum import Enum
+from io import BytesIO
 from typing import Dict
 import dice
+import pdfrw
 
 
 class Ability(str, Enum):
@@ -64,5 +65,35 @@ def get_sundries(nb: int):
         20: "roll of raw wool",
     }
     return [table[dice.roll('1d20')[0]] for r in range(1, nb + 1)]
+
+
+def create_pdf(character):
+    template_pdf = pdfrw.PdfReader('template.pdf')
+    for annot in template_pdf.pages[0]['/Annots']:
+        print(annot['/T'])
+        map_annotation(annot, character)
+
+    output = BytesIO()
+    pdfrw.PdfWriter().write(
+                output, template_pdf)
+    return output
+
+
+def map_annotation(annot, character):
+    if annot['/T'] == '(Character Name)':
+        annot.update(pdfrw.PdfDict(V=character.name))
+    if annot['/T'] == '(Class)':
+        annot.update(pdfrw.PdfDict(V=character.a_class.name))
+    if annot['/T'] == '(Race)':
+        annot.update(pdfrw.PdfDict(V=character.ancestry.race))
+    if annot['/T'] == '(LVL)':
+        annot.update(pdfrw.PdfDict(V=str(character.level)))
+    if annot['/T'] == '(HP)':
+        annot.update(pdfrw.PdfDict(V=str(character.hit_points)))
+    if annot['/T'] == '(MAX)':
+        annot.update(pdfrw.PdfDict(V=str(character.hit_points)))
+    if annot['/T'] == '(Text22)':
+        annot.update(pdfrw.PdfDict(V=str(character.abilities['STR']['score'])))
+
 
 
