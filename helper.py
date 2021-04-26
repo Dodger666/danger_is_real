@@ -5,13 +5,23 @@ from typing import Dict
 import dice
 
 
-class Ability(Enum):
+class Ability(str, Enum):
     STR = "STR",
     CON = "CON",
     DEX = "DEX",
     INT = "INT",
     WIS = "WIS",
     CHA = "CHA",
+
+
+class ClassName(str, Enum):
+    elf = "elf"
+    dwarf = "dwarf"
+    halfling = "halfling"
+    warrior = "warrior"
+    zealot = "zealot"
+    mage = "mage"
+    thief = "thief"
 
 
 def generate_abilities(roll_table: Dict):
@@ -54,4 +64,5 @@ def get_sundries(nb: int):
         20: "roll of raw wool",
     }
     return [table[dice.roll('1d20')[0]] for r in range(1, nb + 1)]
+
 
