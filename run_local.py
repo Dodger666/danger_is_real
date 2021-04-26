@@ -8,3 +8,4 @@ app.include_router(characters.router, tags=["characters"])
 uvicorn.run(app)
 
 
+
