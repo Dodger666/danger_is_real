@@ -10,8 +10,8 @@ router = APIRouter()
 @router.get("/characters/generate/{a_class}/{name}")
 def get_generate(a_class: ClassName, name: str, best_roll_ability: Ability = 'CHA', as_pdf: bool = False):
 
-    char_class, race = factory.get_class(a_class)
-    c = Character(char_class, race)
+    char_class, ancestry = factory.get_class(a_class)
+    c = Character(char_class, ancestry)
     c.ancestry.set_best_ability(best_roll_ability)
     c.generate(name=name)
     if as_pdf:
