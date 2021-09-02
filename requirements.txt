@@ -5,3 +5,4 @@ uvloop
 httptools
 pdfrw
 aiofiles
+requests
