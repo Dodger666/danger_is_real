@@ -109,7 +109,7 @@ primal = \
     Hex(content_text=['jungle'], index=7, directions={1: [12], 2: [10], 3: [5], 4: [2], 5: [4], 6: [9]}),
     Hex(content_text=['jungle'], index=8, directions={1: [13], 2: [11], 3: [6], 4: [3], 5: [5], 6: [10]}),
     Hex(content_text=['hill'], index=9, directions={1: [14], 2: [12], 3: [7], 4: [4], 5: [18], 6: [3]}),
-    Hex(content_text=['swamp', 'wetland', 'tower', 'sea'], index=10,
+    Hex(content_text=['swamp', 'wetland', 'tower', 'sea', 'house', 'pyramid'], index=10,
         directions={1: [14], 2: [12], 3: [7], 4: [4], 5: [18], 6: [3]}),
     Hex(content_text=['hill'], index=11, directions={1: [16], 2: [2], 3: [17], 4: [6], 5: [8], 6: [13]}),
     Hex(content_text=['jungle'], index=12, directions={1: [17], 2: [15], 3: [10], 4: [7], 5: [9], 6: [14]}),
