@@ -35,7 +35,63 @@ class HexFlowerEngine:
                 text_mapper = text_mapper + output + '\n'
                 # print(output)
                 # print(direction,current_hex.index, output)
+
         return text_mapper + self.icon_def
+
+    def generate_map_spiral(self, width: int = 5, height: int = 5, start_hex: int = 1):
+        hexes_matrix = [[f'{col+1:02}{row+1:02}' for col in range(0, width)] for row in range(0, height)]
+        pos_matrix = [[0 for col in range(0, width)] for row in range(0, height)]
+        self._spiral_fill(width, height, pos_matrix)
+        text_mapper = ""
+        current_hex = self.hex_flower[start_hex]
+        for val in range(1, width*height+1):
+            pos_hex = next(((index, row.index(val)) for index, row in enumerate(pos_matrix) if val in row))
+            hex_coord = hexes_matrix[pos_hex[0]][pos_hex[1]]
+            direction = self._get_direction()
+            current_hex = self.hex_flower[random.choice(current_hex.directions[direction])]
+            output = f'{hex_coord} {random.choice(current_hex.content_text)}'
+            text_mapper = text_mapper + output + '\n'
+
+            print(output)
+        return text_mapper + self.icon_def
+
+    def _spiral_fill(self, m, n, a):
+
+        # Initialize value to be filled in matrix.
+        val = 1
+
+        # k - starting row index
+        # m - ending row index
+        # l - starting column index
+        # n - ending column index
+        k, l = 0, 0
+        while k < m and l < n:
+
+            # Print the first row from the remaining rows.
+            for i in range(l, n):
+                a[k][i] = val
+                val += 1
+            k += 1
+
+            # Print the last column from the remaining columns.
+            for i in range(k, m):
+                a[i][n - 1] = val
+                val += 1
+            n -= 1
+
+            # Print the last row from the remaining rows.
+            if k < m:
+                for i in range(n - 1, l - 1, -1):
+                    a[m - 1][i] = val
+                    val += 1
+                m -= 1
+
+            # Print the first column from the remaining columns.
+            if l < n:
+                for i in range(m - 1, k - 1, -1):
+                    a[i][l] = val
+                    val += 1
+                l += 1
 
     def _get_direction(self):
         roll = sum(dice.roll('2d6'))
