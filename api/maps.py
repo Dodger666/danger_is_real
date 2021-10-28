@@ -9,8 +9,8 @@ router = APIRouter()
 
 @router.get("/maps/generate/terrain")
 def get_generate(response: Response,
-                 width: int = Query(5, ge=1, le=10),
-                 height: int = Query(5, ge=1, le=10),
+                 width: int = Query(5, ge=1, le=30),
+                 height: int = Query(5, ge=1, le=30),
                  start_hex: int = Query(1, ge=1, le=19)):
     # Terrain Engine
     terrain_engine = HexFlowerEngine(terrains['hexes'], terrains['icon_def'])
@@ -22,8 +22,8 @@ def get_generate(response: Response,
 
 @router.get("/maps/generate/primal")
 def get_generate_primal(response: Response,
-                 width: int = Query(5, ge=1, le=10),
-                 height: int = Query(5, ge=1, le=10),
+                 width: int = Query(5, ge=1, le=30),
+                 height: int = Query(5, ge=1, le=30),
                  start_hex: int = Query(1, ge=1, le=19)):
     # Terrain Engine
     terrain_engine = HexFlowerEngine(primal['hexes'], primal['icon_def'])
