@@ -14,6 +14,20 @@
 		    position: relative;
 			font-family: 'Courier Prime', monospace;font-size: 1.5em;
 		}
+		.big_title {
+			display: block;
+		    margin-left: auto;
+		    margin-right: auto;
+			font-family: 'Courier Prime', monospace;font-size: 2em;
+			width: 660px
+		}
+		.map_footer {
+			display: block;
+		    margin-left: auto;
+		    margin-right: auto;
+			font-family: 'Courier Prime', monospace;font-size: .8em;
+			width: 660px
+		}
 		.map_title_small {
 		    position:relative;
 			font-family: 'Courier Prime', monospace;font-size: 1.1em;
@@ -56,10 +70,12 @@
 		</script>
 </head>
 <body>
+<div class="big_title">WHITEBOX: FMAG Character Generator</div>
 <div id="map">
 	<img src="static/wh_s1.png" usemap="#image-map1">
 	<img src="static/wh_s2.png" usemap="#image-map2">
 </div>
+<div class="map_footer">Created by <a href="https://dangerIsReal.itch.io">DangerIsReal</a> // Sheet Art by <a href="https://mattjackson.itch.io">msjx</a> // Inspiration from <a href="https://osr.smolderingwizard.com/">Smoldering Wizard</a></div>
 
 <map name="image-map1">
 	<area title="NAME" coords="140,50,1" shape="circle" data-name="{{ name }}">
