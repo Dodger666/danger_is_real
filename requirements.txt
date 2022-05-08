@@ -6,3 +6,4 @@ httptools
 pdfrw
 aiofiles
 requests
+jinja2

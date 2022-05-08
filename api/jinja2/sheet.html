@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+	<style>
+		#map {
+		    position: relative;
+		    display: block;
+		    margin-left: auto;
+		    margin-right: auto;
+			width: 782px
+		}
+		.map_title {
+		    position: relative;
+			font-family: 'Courier Prime', monospace;font-size: 1.5em;
+		}
+		.map_title_small {
+		    position:relative;
+			font-family: 'Courier Prime', monospace;font-size: 1.1em;
+		}
+		.map_title_tiny {
+		    position:relative;
+			font-family: 'Courier Prime', monospace;font-size: .8em;
+		}
+    </style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+		$(function() {
+
+		    $('area').each(function(){
+		        var txt=$(this).data('name');
+		        var coor=$(this).attr('coords');
+		        var coorA=coor.split(',');
+		        var left=coorA[0];
+		        var top=coorA[1];
+				var title=$(this).attr('title')
+
+
+		        if (txt=='Magic-User' || title=='GEAR'){
+		        	var $span=$('<span class="map_title_small">'+txt+'</span>');
+		        }
+				else if (title=='ABILITIES')
+					{
+						var $span=$('<span class="map_title_tiny">'+txt+'</span>');
+					}
+					else
+				{
+					var $span=$('<span class="map_title">'+txt+'</span>');
+				}
+
+		        $span.css({top: top+'px', left: left+'px', position:'absolute'});
+		        $span.appendTo('#map');
+		    })
+
+		})
+		</script>
+</head>
+<body>
+<div id="map">
+	<img src="static/wh_s1.png" usemap="#image-map1">
+	<img src="static/wh_s2.png" usemap="#image-map2">
+</div>
+
+<map name="image-map1">
+	<area title="NAME" coords="140,50,1" shape="circle" data-name="{{ name }}">
+
+    <area title="STR" coords="125,130,1" shape="circle" data-name="15">
+	<area coords="175,130,1" shape="circle" data-name="+1">
+
+    <area title="INT"  coords="125,190,1" shape="circle" data-name="10">
+	<area coords="175,190,1" shape="circle" data-name="0">
+
+    <area title="WIS"  coords="125,260,1" shape="circle" data-name="8">
+	<area coords="175,260,1" shape="circle" data-name="0">
+
+	<area title="DEX"  coords="125,325,1" shape="circle" data-name="15">
+	<area coords="175,325,1" shape="circle" data-name="+1">
+
+	<area title="CON"  coords="125,390,1" shape="circle" data-name="6">
+	<area coords="175,390,1" shape="circle" data-name="-1">
+
+	<area title="CHA"  coords="125,455,1" shape="circle" data-name="11">
+	<area coords="175,455,1" shape="circle" data-name="0">
+
+	<area title="HP" coords="255,115,1" shape="circle" data-name="15">
+	<area title="AC" coords="255,200,1" shape="circle" data-name="14">
+	<area title="BHB" coords="255,275,1" shape="circle" data-name="14">
+	<area title="SV" coords="255,350,1" shape="circle" data-name="14">
+	<area title="MV" coords="255,435,1" shape="circle" data-name="40">
+
+	<area title="CLASS" coords="420,100,1" shape="circle" data-name="{{class}}">
+	<area title="LVL" coords="420,160,1" shape="circle" data-name="1">
+	<area title="XP" coords="595,160,1" shape="circle" data-name="+5%">
+	<area title="RACE" coords="615,100,1" shape="circle" data-name="Halfling">
+	<area title="WPN1" coords="425,220,1" shape="circle" data-name="short sword">
+	<area title="WPN2" coords="425,265,1" shape="circle" data-name="sling">
+	<area title="ARMOR" coords="470,315,1" shape="circle" data-name="leather">
+</map>
+<map name="image-map2">
+	<area title="GEAR" coords="50,580,1" shape="circle" data-name="6 torches<br>backpack<br>bedroll<br>waterskinl<br>1 week iron rations<br>50' rope<br>12 iron spikes<br>mallet">
+	<area title="ABILITIES" coords="50,825,1" shape="circle" data-name="- giant-type creatures only
+inflict half the normal damage.
+<br>
+- +2 to-hit when firing missile weapons.
+<br>
+- When not engaged in combat, can make themselves hard to spot<br>
+and move in almost total silence.
+<br>
+- +4 on saving throws vs. magic.
+">
+	<area title="GP" coords="630,580,1" shape="circle" data-name="19">
+</map>
+</body>
+</html>
