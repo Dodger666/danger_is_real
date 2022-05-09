@@ -422,7 +422,7 @@ def get_save(character: Dict):
 
 def get_hp(character: Dict):
     hp = int(dice.roll('1d6'))
-    if character['class'] == 'Fighter':
+    if character['class'] == 'Fighter' or character['race'] == 'Elf':
         hp += 1
     hp += int(character['conb'])
     if hp == 0:
