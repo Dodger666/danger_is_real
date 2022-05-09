@@ -525,11 +525,26 @@ def get_race():
 
 
 def get_class(character: Dict):
+    abi = {'str': character["str"], 'dex': character["dex"], 'int': character["int"], 'wis': character["wis"]}
+    abi_sorted = dict(sorted(abi.items(), key=lambda item: item[1], reverse=True))
+    best = list(abi_sorted.keys())[0]
+    # boost prime req to 10 if lower
+    if character[best] < 10:
+        character[best] = 10
     classes = ['Thief', 'Fighter', 'Cleric', 'Magic-User']
+
     if character['race'] == 'Elf':
         return 'Fighter<br>Magic-User'
     if character['race'] in ['Dwarf', 'Halfling']:
+        if character["str"] > character["dex"]:
+            return 'Fighter'
+        if character["dex"] > character["str"]:
+            return 'Thief'
         return classes[int(dice.roll('1d2')) - 1]
+    if best == 'str': return 'Fighter'
+    if best == 'dex': return 'Thief'
+    if best == 'int': return 'Magic-User'
+    if best == 'wis': return 'Cleric'
     return classes[int(dice.roll('1d4')) - 1]
 
 
@@ -583,6 +598,13 @@ def format_gear(character):
 # noinspection PyDictCreation
 def generate_char():
     character = {}
+    character["str"], character["strb"] = get_ability()
+    character["dex"], character["dexb"] = get_ability()
+    character["con"], character["conb"] = get_ability()
+    character["int"], character["intb"] = get_ability()
+    character["wis"], character["wisb"] = get_ability()
+    character["cha"], character["chab"] = get_ability()
+
     character['race'], character['abilities'] = get_race()
     character['class'] = get_class(character)
     character['gear'], character['gp'], character['armor'], class_abilities = get_gear(character)
@@ -590,13 +612,6 @@ def generate_char():
 
     character["name"] = get_name() + " " + title[int(dice.roll('1d100')) - 1] + " " + get_alignment(character)
     character['lvl'] = '1'
-
-    character["str"], character["strb"] = get_ability()
-    character["dex"], character["dexb"] = get_ability()
-    character["con"], character["conb"] = get_ability()
-    character["int"], character["intb"] = get_ability()
-    character["wis"], character["wisb"] = get_ability()
-    character["cha"], character["chab"] = get_ability()
 
     character['xp'] = f'({get_xp_bonus(character)}%)'
     character['ac'] = get_ac(character)
