@@ -560,6 +560,26 @@ def get_name():
     return str(get_syllable() + get_syllable() + get_syllable() + get_syllable()).capitalize()
 
 
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
+def chunk_gear(character):
+    gear_chunks = chunks(character['gear'], 2)
+    formatted_gear = ""
+    for chunk in gear_chunks:
+        formatted_gear += "&emsp;/&emsp;".join(chunk) + "<br>"
+    return formatted_gear
+
+
+def format_gear(character):
+    if len(character['gear']) < 10:
+        return "<br>".join(character['gear'])
+    return chunk_gear(character)
+
+
 # noinspection PyDictCreation
 def generate_char():
     character = {}
@@ -586,8 +606,6 @@ def generate_char():
     character['sv'] = get_save(character)
     character['mv'] = get_movement(character)
     character['spell'] = get_mu_spell(character)
-    character['gear'] = "<br>".join(character['gear'])
+    character['gear'] = format_gear(character)
 
     return character
-
-# TODO languages, class & race abilities
