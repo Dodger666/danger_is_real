@@ -303,20 +303,23 @@ title = ["from Above",
          "of the South",
          "of the West"]
 melee_weapons = ["dagger", "2 daggers", "3 daggers",
-"hand axe",
-"mace",
-"sword",
-"battle axe", "2 battle axes"
-"morning star",
-"flail",
-"warhammer",
-"spear",
-"halberd", "quarter-staff", "cudgel",
-"two-handed sword"]
-missile_weapons = ["short bow", "long bow", "dagger", "2 daggers", "3 daggers", "light crossbow", "heavy crossbow", "sling"]
+                 "hand axe",
+                 "mace",
+                 "sword",
+                 "battle axe", "2 battle axes"
+                               "morning star",
+                 "flail",
+                 "warhammer",
+                 "spear",
+                 "halberd", "quarter-staff", "cudgel",
+                 "two-handed sword"]
+missile_weapons = ["short bow", "long bow", "dagger", "2 daggers", "3 daggers", "light crossbow", "heavy crossbow",
+                   "sling"]
 
 CLERIC = {
-    'prime': 'wis',
+    'abilities': 'Use blunt weapons, only missile allowed is oil.<br>'
+                 '+2 Save vs. poison and paralysis.<br>'
+                 'Turn Undead: Use divine power to banish the undead.<br>',
     'gear': ["cudgel, 6 torches, backpack, waterskin, 1 week iron rations, 10′ pole, wooden cross, 4 GP",
              "cudgel, shield, 6 torches, backpack, waterskin, 1 week iron rations, 50′ rope, wooden cross, 4 GP",
              "mace, leather armor, 6 torches, backpack, waterskin, 1 week iron rations, 10′ pole, wooden cross, 5 GP",
@@ -335,7 +338,8 @@ CLERIC = {
              "plate armor, shield, helmet, mace, backpack, waterskin, lantern, 4 flasks oil, 1 week iron rations, 50′ rope, silver cross, vial holy water, 12 iron spikes, 3 stakes & mallet, small sack, 10 GP"]
 }
 FIGHTER = {
-    'prime': 'str',
+    'abilities': 'Fury: One attack per level per round against 1 HD or less foes.<br>'
+                 '+2 Save vs. Death and Poison<br>',
     'gear': ["spear, dagger, 6 torches, backpack, waterskin, 1 week iron rations, 50′ rope, 3 GP",
              "cudgel, leather armor, 6 torches, backpack, waterskin, 1 week iron rations, 10′ pole, 1 GP",
              "leather armor, morning star, dagger, 6 torches, backpack, waterskin, 1 week iron rations, 50′ rope, 3 GP",
@@ -354,7 +358,8 @@ FIGHTER = {
              "plate armor, shield, helmet, sword, 2 daggers, light crossbow, case with 30 quarrels, 4 silver tipped quarrels, backpack, waterskin, lantern, 4 flasks oil, 1 week iron rations, 10′ pole, 9 GP"]
 }
 MAGIC_USER = {
-    'prime': 'int',
+    'abilities': 'Use only daggers or staves, no armor allowed.<br>'
+                 '+2 Save vs. spells, wands and staves.<br>',
     'gear': ["dagger, 6 torches, backpack, waterskin, 1 week iron rations, 10′ pole, 4 GP",
              "2 daggers, 6 torches, backpack, waterskin, 1 week iron rations, 2 flasks oil, 50′ rope, 7 GP",
              "dagger, backpack, waterskin, lantern, 4 flasks oil, 1 week iron rations, 10′ pole, 7 GP",
@@ -374,7 +379,9 @@ MAGIC_USER = {
 }
 
 THIEF = {
-    'prime': 'dex',
+    'abilities': 'Back Stab: +2 To-Hit and double damage against unaware foes<br>'
+                 '+2 Save vs. Traps (mundane or magic).<br>'
+                 'Thievery: 2+6 chances in clandestine or stealth-based actions',
     'gear': [
         "cudgel, sling, pouch with 20 sling bullets, 6 torches, backpack, waterskin, 1 week iron rations, 50′ rope, 4 GP",
         "cudgel, leather armor, 6 torches, backpack, waterskin, 1 week iron rations, 10′ pole, 1 GP",
@@ -398,7 +405,7 @@ THIEF = {
 def get_mu_spell(character: Dict):
     if character['class'] == 'Magic-User' or character['race'] == 'Elf':
         spells = ['Charm Person', 'Sleep']
-        return spells[int(dice.roll('1d2'))-1]
+        return spells[int(dice.roll('1d2')) - 1]
     return ""
 
 
@@ -423,14 +430,18 @@ def get_hp(character: Dict):
     return hp
 
 
-def get_alignment():
-    alignment = ['(Lawful)', '(Neutral)', '(Chaotic)']
+def get_alignment(character):
+    alignment = ['(Lawful)', '(Chaotic)', '(Neutral)']
+
+    if character['class'] == 'Cleric':
+        return alignment[int(dice.roll('1d2')) - 1]
     return alignment[int(dice.roll('1d3')) - 1]
 
 
 def get_weapons(character: Dict):
     return next((item for item in character['gear'] if item.strip() in melee_weapons), ""), \
            next((item for item in character['gear'] if item.strip() in missile_weapons), "")
+
 
 def get_ac(character: Dict):
     ac = 10
@@ -458,15 +469,19 @@ def split_gear_gold_armor(gear: str):
 
 
 def get_gear(character: Dict):
-    roll = int(dice.roll('3d6'))-3
+    roll = int(dice.roll('3d6')) - 3
     if character['class'] == 'Cleric':
-        return split_gear_gold_armor(CLERIC['gear'][roll])
+        gear, gold, ar = split_gear_gold_armor(CLERIC['gear'][roll])
+        return gear, gold, ar, CLERIC['abilities']
     if character['class'] == 'Thief':
-        return split_gear_gold_armor(THIEF['gear'][roll])
+        gear, gold, ar = split_gear_gold_armor(THIEF['gear'][roll])
+        return gear, gold, ar, THIEF['abilities']
     if character['class'] == 'Magic-User':
-        return split_gear_gold_armor(MAGIC_USER['gear'][roll])
+        gear, gold, ar = split_gear_gold_armor(MAGIC_USER['gear'][roll])
+        return gear, gold, ar, MAGIC_USER['abilities']
 
-    return split_gear_gold_armor(FIGHTER['gear'][roll])
+    gear, gold, ar = split_gear_gold_armor(FIGHTER['gear'][roll])
+    return gear, gold, ar, FIGHTER['abilities']
 
 
 def get_xp_bonus(character: Dict):
@@ -488,12 +503,25 @@ def get_xp_bonus(character: Dict):
 def get_race():
     roll = int(dice.roll('1d20'))
     if roll <= 3:
-        return "Dwarf"
+        abilities = 'Giant-type creatures inflict half damage against you.<br>' \
+                    '4-6 searching or 2-6 passively chances to spot traps, slanting passages,<br>and construction while underground.<br>' \
+                    '+4 Save vs Magic.<br>' \
+                    'Extra languages: gnomes, goblins, orcs, and kobolds.<br>'
+        return "Dwarf", abilities
     if roll <= 6:
-        return "Elf"
+        abilities = '+1 To-Hit or Damage vs goblins, orcs, intelligent undead<br>and lycanthropes.<br>' \
+                    'Immune to paralysis caused by undead.<br>' \
+                    '4-6 searching or 2-6 passively chances to spot secrret doors<br>' \
+                    'Extra languages: gnolls, goblins, orcs, and hobgoblins.<br>'
+        return "Elf", abilities
     if roll <= 9:
-        return "Halfling"
-    return 'Human'
+        abilities = 'Giant-type creatures inflict half damage against you.<br>' \
+                    '+2 To-Hit with missile weapons.<br>' \
+                    '5-6 chances to hide or move silently out of combat.<br>' \
+                    '+4 Save vs Magic.<br>' \
+                    'Extra languages: see with Referee.<br>'
+        return "Halfling", abilities
+    return 'Human', ""
 
 
 def get_class(character: Dict):
@@ -535,11 +563,12 @@ def get_name():
 # noinspection PyDictCreation
 def generate_char():
     character = {}
-    character['race'] = get_race()
+    character['race'], character['abilities'] = get_race()
     character['class'] = get_class(character)
-    character['gear'], character['gp'], character['armor'] = get_gear(character)
+    character['gear'], character['gp'], character['armor'], class_abilities = get_gear(character)
+    character['abilities'] += '<br>' + class_abilities
 
-    character["name"] = get_name() + " " + title[int(dice.roll('1d100')) - 1] + " " + get_alignment()
+    character["name"] = get_name() + " " + title[int(dice.roll('1d100')) - 1] + " " + get_alignment(character)
     character['lvl'] = '1'
 
     character["str"], character["strb"] = get_ability()
@@ -549,7 +578,7 @@ def generate_char():
     character["wis"], character["wisb"] = get_ability()
     character["cha"], character["chab"] = get_ability()
 
-    character['xp'] = f'(+{get_xp_bonus(character)}%)'
+    character['xp'] = f'({get_xp_bonus(character)}%)'
     character['ac'] = get_ac(character)
     character['wpn1'], character['wpn2'] = get_weapons(character)
     character['bhb'] = 0
@@ -560,3 +589,5 @@ def generate_char():
     character['gear'] = "<br>".join(character['gear'])
 
     return character
+
+# TODO languages, class & race abilities
