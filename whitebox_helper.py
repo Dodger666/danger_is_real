@@ -302,7 +302,7 @@ title = ["from Above",
          "of the Watchful Eyes",
          "of the South",
          "of the West"]
-melee_weapons = ["dagger", "2 daggers", "3 daggers",
+melee_weapons = [
                  "hand axe",
                  "mace",
                  "sword",
@@ -312,7 +312,7 @@ melee_weapons = ["dagger", "2 daggers", "3 daggers",
                  "warhammer",
                  "spear",
                  "halberd", "quarter-staff", "cudgel",
-                 "two-handed sword"]
+                 "two-handed sword","dagger", "2 daggers", "3 daggers"]
 missile_weapons = ["short bow", "long bow", "dagger", "2 daggers", "3 daggers", "light crossbow", "heavy crossbow",
                    "sling"]
 
