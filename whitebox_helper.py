@@ -596,8 +596,9 @@ def format_gear(character):
 
 
 # noinspection PyDictCreation
-def generate_char():
+def generate_char(font_name: str, noname: str):
     character = {}
+    character["font"] = font_name
     character["str"], character["strb"] = get_ability()
     character["dex"], character["dexb"] = get_ability()
     character["con"], character["conb"] = get_ability()
@@ -610,7 +611,8 @@ def generate_char():
     character['gear'], character['gp'], character['armor'], class_abilities = get_gear(character)
     character['abilities'] += '<br>' + class_abilities
 
-    character["name"] = get_name() + " " + title[int(dice.roll('1d100')) - 1] + " " + get_alignment(character)
+    if noname != 'blank':
+        character["name"] = get_name() + " " + title[int(dice.roll('1d100')) - 1] + " " + get_alignment(character)
     character['lvl'] = '1'
 
     character['xp'] = f'({get_xp_bonus(character)}%)'
