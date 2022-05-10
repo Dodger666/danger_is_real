@@ -313,8 +313,8 @@ melee_weapons = [
                  "spear",
                  "halberd", "quarter-staff", "cudgel",
                  "two-handed sword","dagger", "2 daggers", "3 daggers"]
-missile_weapons = ["short bow", "long bow", "dagger", "2 daggers", "3 daggers", "light crossbow", "heavy crossbow",
-                   "sling"]
+missile_weapons = ["short bow", "long bow", "light crossbow", "heavy crossbow",
+                   "sling", "dagger", "2 daggers", "3 daggers"]
 
 CLERIC = {
     'abilities': 'Use blunt weapons, only missile allowed is oil.<br>'
