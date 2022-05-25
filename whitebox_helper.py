@@ -403,7 +403,7 @@ THIEF = {
 
 
 def get_mu_spell(character: Dict):
-    if character['class'] == 'Magic-User' or character['race'] == 'Elf':
+    if character['class'] == 'Magic-User':
         spells = ['Charm Person', 'Sleep']
         return spells[int(dice.roll('1d2')) - 1]
     return ""
