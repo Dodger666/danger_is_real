@@ -602,7 +602,8 @@ def format_gear(character):
 # noinspection PyDictCreation
 def generate_char(font_name: str = 'Permanent Marker', noname: str = 'none', json: bool = False):
     character = {}
-    character["font"] = font_name
+    if not json:
+        character["font"] = font_name
     character["str"], character["strb"] = get_ability()
     character["dex"], character["dexb"] = get_ability()
     character["con"], character["conb"] = get_ability()
