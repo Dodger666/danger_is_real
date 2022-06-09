@@ -1,4 +1,6 @@
+import json
 import os
+
 from whitebox_helper import generate_char
 from fastapi import APIRouter, Request, Query
 from fastapi.responses import HTMLResponse
@@ -20,3 +22,9 @@ def generate(request: Request,  font = 'none', name = 'none'):
     character = generate_char(font_name, name)
     character["request"] = request
     return templates.TemplateResponse("sheet.html", character)
+
+
+@router.get("/whitebox/json")
+def generate():
+    character = generate_char(json=True)
+    return character

@@ -600,7 +600,7 @@ def format_gear(character):
 
 
 # noinspection PyDictCreation
-def generate_char(font_name: str, noname: str):
+def generate_char(font_name: str = 'Permanent Marker', noname: str = 'none', json: bool = False):
     character = {}
     character["font"] = font_name
     character["str"], character["strb"] = get_ability()
@@ -614,6 +614,8 @@ def generate_char(font_name: str, noname: str):
     character['class'] = get_class(character)
     character['gear'], character['gp'], character['armor'], class_abilities = get_gear(character)
     character['abilities'] += '<br>' + class_abilities
+    if json:
+        character['abilities'] = character['abilities'].split('<br>')
 
     if noname != 'blank':
         character["name"] = get_name() + " " + title[int(dice.roll('1d100')) - 1] + " " + get_alignment(character)
@@ -627,6 +629,7 @@ def generate_char(font_name: str, noname: str):
     character['sv'] = get_save(character)
     character['mv'] = get_movement(character)
     character['spell'] = get_mu_spell(character)
-    character['gear'] = format_gear(character)
+    if not json:
+        character['gear'] = format_gear(character)
 
     return character
