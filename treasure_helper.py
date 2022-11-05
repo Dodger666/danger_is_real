@@ -1,3 +1,4 @@
+import random
 import dice
 import math
 
@@ -6,6 +7,151 @@ GEMS_JEWELRY = []
 MINOR_MAGIC_ITEMS = []
 MEDIUM_MAGIC_ITEMS = []
 MAJOR_MAGIC_ITEMS = []
+
+
+def get_cursed_scroll():
+    return 'cursed scroll'
+
+def get_protection_scroll():
+    return 'protection scroll'
+def get_magic_user_spell(level: int):
+
+    spell_list = {
+    1: [
+    'Charm Person	',
+    'Detect Magic	',
+    'Hold Portal	',
+    'Light	',
+    'Magic Missile	',
+    'Protection from Evil	',
+    'Read Languages	',
+    'Read Magic	',
+    'Shield	',
+    'Sleep	'],
+    2:[
+    'Continual Light	',
+    'Darkness, 15-foot Radius	',
+    'Detect Evil	',
+    'Detect Invisibility	',
+    'ESP	',
+    'Invisibility	',
+    'Knock	',
+    'Levitate	',
+    'Locate Object	',
+    'Magic Mouth	',
+    'Mirror Image	',
+    'Phantasmal Force	',
+    'Pyrotechnics	',
+    'Strength	',
+    'Web	',
+    'Wizard Lock	'],
+    3:[
+    'Clairaudience	',
+    'Clairvoyance	',
+    'Darkvision	',
+    'Dispel Magic	',
+    'Explosive Runes	',
+    'Fireball	',
+    'Fly	',
+    'Haste	',
+    'Hold Person	',
+    'Invisibility, 10-foot Radius	',
+    'Lightning Bolt	',
+    'Monster Summoning I	',
+    'Protection from Evil, 10-foot	',
+    'Radius	',
+    'Protection from Normal Missiles	',
+    'Rope Trick	',
+    'Slow	',
+    'Suggestion	',
+    'Water Breathing	'],
+    4:[
+    'Charm Monster	',
+    'Confusion	',
+    'Dimension Door	',
+    'Extension I	',
+    'Fear	',
+    'Hallucinatory Terrain	',
+    'Ice Storm	',
+    'Massmorph	',
+    'Monster Summoning II	',
+    'Plant Growth	',
+    'Polymorph Other	',
+    'Polymorph Self	',
+    'Remove Curse	',
+    'Wall of Fire	',
+    'Wall of Ice	',
+    'Wizard Eye	'],
+    5:[
+    'Animal Growth	',
+    'Animate Dead	',
+    'Cloudkill	',
+    'Conjuration of Elementals	',
+    'Contact Other Plane	',
+    'Extension II	',
+    'Feeblemind	',
+    'Hold Monster	',
+    'Magic Jar	',
+    'Monster Summoning III	',
+    'Passwall	',
+    'Telekinesis	',
+    'Teleport	',
+    'Transmute Rock to Mud	',
+    'Wall of Iron	',
+    'Wall of Stone	'],
+    6:[
+    'Anti-Magic Shell	',
+    'Control Weather	',
+    'Death Spell	',
+    'Disintegrate	',
+    'Enchant Item	',
+    'Extension III	',
+    'Geas	',
+    'Invisible Stalker	',
+    'Legend Lore	',
+    'Lower Water	',
+    'Monster Summoning IV	',
+    'Move Earth	',
+    'Part Water	',
+    'Project Image	',
+    'Reincarnation	',
+    'Repulsion	',
+    'Stone to Flesh	'],
+    7:[
+    'Charm Plants	',
+    'Conjuration of Demons	',
+    'Delayed Blast Fireball	',
+    'Limited Wish	',
+    'Mass Invisibility	',
+    'Monster Summoning V	',
+    'Phase Door	',
+    'Power Word, Stun	',
+    'Reverse Gravity	',
+    'Simulacrum	'],
+    8:[
+    'Clone	',
+    'Mass Charm	',
+    'Mind Blank	',
+    'Monster Summoning VI	',
+    'Permanency	',
+    'Polymorph Object	',
+    'Power Word, Blind	',
+    'Symbol	'],
+    9:[
+    'Astral Spell	',
+    'Maze	',
+    'Gate	',
+    'Meteor Swarm	',
+    'Monster Summoning VII	',
+    'Power Word, Kill	',
+    'Prismatic Sphere	',
+    'Shape Change	',
+    'Time Stop	',
+    'Wish	']
+    }
+    return random.choice(spell_list[level])
+
+
 
 def table_79_minor_gems_and_jewelry():
     dice_result = int(dice.roll('1d4'))
@@ -48,12 +194,11 @@ def table_82_minor_magic_items():
     if dice_result == 1:
         return table_85_potions()
     if dice_result == 2:
-        return table_86_scrolls('1d6')
-
+        return table_86_scrolls()
     if dice_result == 3:
-        return None
+        return []
     if dice_result == 4:
-        return None
+        return []
 
 
 def table_85_potions():
@@ -110,7 +255,19 @@ def table_85_potions():
 
 def table_86_scrolls(dice_type: str):
     dice_result = int(dice.roll(dice_type))
-    return 'a scroll'
+    # tuple (nb of spell, level each)
+    if dice_result == 1:
+        return [get_magic_user_spell(1)]
+    if dice_result == 2:
+        return [get_magic_user_spell(int(dice.roll('1d3')))]
+    if dice_result == 3:
+        return [get_magic_user_spell(int(dice.roll('1d2'))), get_magic_user_spell(int(dice.roll('1d2')))]
+    if dice_result == 4:
+        return [get_magic_user_spell(1), get_magic_user_spell(1), get_magic_user_spell(1)]
+    if dice_result == 5:
+        return [get_cursed_scroll()]
+    if dice_result == 6:
+        return [get_protection_scroll()]
 
 def generate_treasure_hoard(total_xp: int):
     total_gold = int(dice.roll('1d3+1')) * total_xp
@@ -157,4 +314,6 @@ def actual_tradeout(nb_possible):
     return tot_tradeout
 
 
-print(table_82_minor_magic_items())
+if __name__ == '__main__':
+    #generate_treasure_hoard(3500)
+    print(table_86_scrolls('1d6'))
