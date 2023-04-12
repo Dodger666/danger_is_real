@@ -3,6 +3,7 @@ from typing import Dict
 import dice
 import random
 from model.ose_char_class import cleric, dwarf, elf, hobbit, fighter, thief, magicuser
+from model.ose_equipment import get_equipment
 
 syllables = [
     "A",
@@ -253,14 +254,17 @@ def get_xp_bonus(character: Dict):
             return '+10%'
         if character['int'] >= 13 and character['int'] >= 13:
             return '+5%'
+        return '0%'
 
     if character['classe'] == 'Hobbit':
         if character['dex'] >= 13 and character['for'] >= 13:
             return '+10%'
         if character['dex'] >= 13 or character['for'] >= 13:
             return '+5%'
+        return '0%'
 
     prime_score = character[character['prime']]
+
     if prime_score >= 16:
         return '+10%'
     if prime_score >= 13:
@@ -340,6 +344,22 @@ def get_name():
 
     return str(_get_syllable() + _get_syllable() + _get_syllable() + _get_syllable()).capitalize()
 
+def get_ac(has_shield, armor, dex_bonus):
+
+    acnu = ac = 10 + int(dex_bonus)
+
+    if has_shield:
+        ac += 1
+    if armor == 'armure de cuir':
+        ac += 2
+    if armor == 'cotte de mailles':
+        ac += 4
+    if armor == 'armure de plaques':
+        ac += 2
+    return ac, acnu
+
+
+
 
 # noinspection PyDictCreation
 def generate_char():
@@ -378,14 +398,20 @@ def generate_char():
 
     character.update(get_class(character))
 
-    character['forb'] = get_ability_bonus(character['for'])
+    character['bonusatt'] = character['forb'] = get_ability_bonus(character['for'])
     character['intb'] = get_ability_bonus(character['int'])
     character['sagb'] = get_ability_bonus(character['sag'])
-    character['dexb'] = get_ability_bonus(character['dex'])
+    character['bonusdist'] = character['dexb'] = get_ability_bonus(character['dex'])
     character['conb'] = get_ability_bonus(character['con'])
     character['chab'] = get_cha_bonus(character['cha'])
 
     character['pv'] = character['pvmax'] = get_hp(character)
     character['xpbonus'] = get_xp_bonus(character)
+    eq_list, has_shield, armor, po = get_equipment(character['classe'])
+    character['po'] = po
+    character['equip1'] = '\n'.join(eq_list[:5])
+    character['equip2'] = '\n'.join(eq_list[5:-1])
+    character['ca'], character['canu'] = get_ac(has_shield, armor, character['dexb'])
+
 
     return character
