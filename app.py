@@ -2,7 +2,7 @@ import os
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from api import characters, maps, whitebox_character, snw_treasure_generator, names
+from api import characters, maps, whitebox_character, snw_treasure_generator, names, ose_character
 
 appapi = FastAPI()
 
@@ -12,6 +12,7 @@ appapi.mount("/static", StaticFiles(directory=static_folder), name="static")
 appapi.include_router(characters.router, tags=["characters"])
 appapi.include_router(maps.router, tags=["maps"])
 appapi.include_router(whitebox_character.router, tags=["whitebox_character"])
+appapi.include_router(ose_character.router, tags=["ose_character"])
 appapi.include_router(snw_treasure_generator.router, tags=["snw_treasure_generator"])
 appapi.include_router(names.router, tags=["holmesian_names"])
 
