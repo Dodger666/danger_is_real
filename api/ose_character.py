@@ -61,7 +61,7 @@ def generate_pdf(background_tasks: BackgroundTasks):
      'xp': '',
      'xpsuiv': '',
      'xpbonus': '',
-     'equip1': '',
+     'equip1': 'hache 2m\nbouclier',
      'equip2': '',
      'pp': '',
      'po': '',
