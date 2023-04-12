@@ -3,7 +3,7 @@ import os
 import io
 
 
-from whitebox_helper import generate_char
+from ose_helper import generate_char
 from fastapi import APIRouter, Request, Query
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -68,6 +68,7 @@ def generate_pdf(background_tasks: BackgroundTasks):
      'pe': '',
      'pa': '',
      'pc': ''}
+    data = generate_char()
     buffer = io.BytesIO()
     fillpdfs.write_fillable_pdf(full_path, buffer, data, flatten=False)
     background_tasks.add_task(buffer.close)

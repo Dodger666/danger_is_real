@@ -26,28 +26,30 @@ baseclass = {'pj': '',
      'conb': '',
      'chab': '',
      'xp': '0',
+     'xpbonus': '',
      'pp': '',
      'po': '',
      'pe': '',
      'pa': '',
      'pc': ''}
 
-clecric = {
+cleric = {
      'classe': 'Clerc',
+     'prime': 'sag',
      'dv': 'd6',
-     'facultes': '',
+     'facultes': 'Vade-retro\n1 sort divin de niveau 1 par jour',
      'svmort': '11',
      'savbag': '12',
      'svpara': '14',
      'svsouf': '16',
      'svsort': '15',
      'xpsuiv': '1500',
-     'xpbonus': '',
      'equip1': '',
      'equip2': ''}
 
 dwarf = {
      'classe': 'Nain',
+     'prime': 'for',
      'dv': 'd8',
      'facultes': '',
      'svmort': '8',
@@ -56,6 +58,75 @@ dwarf = {
      'svsouf': '13',
      'svsort': '12',
      'xpsuiv': '2200',
-     'xpbonus': '',
+     'equip1': '',
+     'equip2': ''}
+
+elf = {
+     'classe': 'Elfe',
+     'prime': '',
+     'dv': 'd6',
+     'facultes': '',
+     'svmort': '12',
+     'savbag': '13',
+     'svpara': '13',
+     'svsouf': '15',
+     'svsort': '15',
+     'xpsuiv': '4000',
+     'equip1': '',
+     'equip2': ''}
+
+hobbit = {
+     'classe': 'Hobbit',
+     'prime': '',
+     'dv': 'd6',
+     'facultes': '',
+     'svmort': '8',
+     'savbag': '9',
+     'svpara': '10',
+     'svsouf': '13',
+     'svsort': '12',
+     'xpsuiv': '2000',
+     'equip1': '',
+     'equip2': ''}
+
+fighter = {
+     'classe': 'Guerrier',
+     'prime': 'for',
+     'dv': 'd8',
+     'facultes': '',
+     'svmort': '12',
+     'savbag': '13',
+     'svpara': '14',
+     'svsouf': '15',
+     'svsort': '16',
+     'xpsuiv': '2000',
+     'equip1': '',
+     'equip2': ''}
+
+magicuser = {
+     'classe': 'Magicien',
+     'prime': 'int',
+     'dv': 'd4',
+     'facultes': '1 sort profane de niveau 1 par jour',
+     'svmort': '13',
+     'savbag': '14',
+     'svpara': '13',
+     'svsouf': '16',
+     'svsort': '15',
+     'xpsuiv': '2500',
+     'equip1': '',
+     'equip2': ''}
+
+thief = {
+     'classe': 'Voleur',
+     'prime': 'dex',
+     'dv': 'd4',
+     'facultes': '',
+     'svmort': '13',
+     'savbag': '14',
+     'svpara': '13',
+     'svsouf': '16',
+     'svsort': '15',
+     'xpsuiv': '1200',
      'equip1': '',
      'equip2': ''}
