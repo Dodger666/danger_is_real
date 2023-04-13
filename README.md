@@ -1,1 +1,1 @@
-# A Collections of OSR RPG Tools 
+# A Collection of OSR RPG Tools 
