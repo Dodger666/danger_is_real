@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from api import characters, maps, whitebox_character, names, ose_character
 
 app = FastAPI()
+
 this_dir = os.path.abspath(os.path.dirname(__file__))
 static_folder = os.path.join(this_dir, 'api/static')
 app.mount("/static", StaticFiles(directory=static_folder), name="static")

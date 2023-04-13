@@ -355,7 +355,7 @@ def get_ac(has_shield, armor, dex_bonus):
     if armor == 'cotte de mailles':
         ac += 4
     if armor == 'armure de plaques':
-        ac += 2
+        ac += 6
     return ac, acnu
 
 
