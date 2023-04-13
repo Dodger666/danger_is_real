@@ -54,7 +54,7 @@ class_equipment = {
         " épée, dague, arbalète, étui de 30 carreaux, 6 carreaux à pointe d'argent, armure de cuir, sac à dos, gourde, lanterne, 4 flacons d'huile, 1 semaine de rations de fer, perche de 3m, 4d6 PO",
         " épée, dague, arc court, carquois de 20 flèches, 6 flèches à pointe d'argent, armure de cuir, sac à dos, gourde, lanterne, 1 sac caltrops, 4 flacons d'huile, 1 semaine de rations de fer, 15 m de corde, 6d6 PO",
         " épée, 4 dagues, armure de cuir, sac à dos, outre, lanterne, 4 flacons d'huile, 1 semaine de rations de fer, perche de 3m, 2 petits sacs, 20d6 PO",
-        " épée, 3 dagues, arbalète, étui de 30 carreaux, armure de cuir, sac à dos, gourde, lanterne, 1 sac caltrops, 4 flacons d'huile, rations de fer pour 1 semaine, corde de 15 m, petit sac 20d6 PO",
+        " épée, 3 dagues, arbalète, étui de 30 carreaux, armure de cuir, sac à dos, gourde, lanterne, 1 sac caltrops, 4 flacons d'huile, rations de fer pour 1 semaine, corde de 15 m, petit sac, 20d6 PO",
         " épée, 1 dague d'argent, arc court, carquois de 20 flèches, 8 flèches à pointe d'argent, armure de cuir, sac à dos, gourde, lanterne, 4 flacons d'huile, 1 semaine de rations de fer, 2 petits sacs, perche de 3m, 6d6 PO"]
     ,
     "Guerrier":
@@ -134,7 +134,7 @@ def get_equipment(class_name):
     roll = sum(dice.roll('3d6')) - 3
     eq_list = class_equipment[class_name][roll].split(',')
     has_shield = any('bouclier' in v for v in eq_list)
-    armor = next((v for v in eq_list if v in ['armure de plaques', 'cotte de mailles', 'armure de cuir']), '')
+    armor = next((v.strip() for v in eq_list if v.strip() in ['armure de plaques', 'cotte de mailles', 'armure de cuir']), '')
 
     po = 0
     if 'd' in eq_list[-1]:

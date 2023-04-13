@@ -345,7 +345,7 @@ def get_name():
     return str(_get_syllable() + _get_syllable() + _get_syllable() + _get_syllable()).capitalize()
 
 def get_ac(has_shield, armor, dex_bonus):
-
+    armor = armor.strip()
     acnu = ac = 10 + int(dex_bonus)
 
     if has_shield:
@@ -358,6 +358,15 @@ def get_ac(has_shield, armor, dex_bonus):
         ac += 2
     return ac, acnu
 
+
+def get_movement(armor):
+    armor = armor.strip()
+    if armor == 'armure de cuir':
+        return '9m', '27m', '27km'
+    if armor == 'cotte de mailles' or armor == 'armure de plaques':
+        return '6m', '18m', '18km'
+
+    return '12m', '36m', '36km'
 
 
 
@@ -412,6 +421,6 @@ def generate_char():
     character['equip1'] = '\n'.join(eq_list[:5])
     character['equip2'] = '\n'.join(eq_list[5:-1])
     character['ca'], character['canu'] = get_ac(has_shield, armor, character['dexb'])
-
+    character['mvren'], character['mvext'], character['mvvoy'] = get_movement(armor)
 
     return character
