@@ -34,7 +34,7 @@ def generate_pdf(background_tasks: BackgroundTasks):
     buffer = io.BytesIO()
     fillpdfs.write_fillable_pdf(full_path, buffer, data, flatten=False)
     background_tasks.add_task(buffer.close)
-    headers = {'Content-Disposition': 'inline; filename="out.pdf"'}
+    headers = {'Content-Disposition': 'inline; filename="perso_ose.pdf"'}
 
     return Response(buffer.getvalue(), headers=headers, media_type='application/pdf')
 
