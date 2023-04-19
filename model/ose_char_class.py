@@ -1,3 +1,4 @@
+from enum import Enum
 
 baseclass = {'pj': '',
      'titre': '',
@@ -130,3 +131,12 @@ thief = {
      'xpsuiv': '1200',
      'equip1': '',
      'equip2': ''}
+
+class ose_classes(Enum):
+    CLERIC = 'Clerc'
+    FIGHTER = 'Guerrier'
+    MAGICUSER = 'Magicien'
+    THIEF = 'Voleur'
+    HOBBIT = 'Hobbit'
+    DWARF = 'Nain'
+    ELF = 'Elfe'

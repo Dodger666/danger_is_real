@@ -1,7 +1,6 @@
 dice
 fastapi
 uvicorn
-uvloop
 httptools
 pdfrw
 aiofiles
