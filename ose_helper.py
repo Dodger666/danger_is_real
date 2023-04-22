@@ -368,10 +368,14 @@ def get_movement(armor):
 
     return '12m', '36m', '36km'
 
+def roll_attribute(is_4d6dl):
+    if is_4d6dl:
+        return sum(dice.roll('4d6h3'))
+    return sum(dice.roll('3d6'))
 
 
 # noinspection PyDictCreation
-def generate_char():
+def generate_char(is_4d6dl: bool):
     character = {'pj': get_name(),
                  'titre': '',
                  'al': get_alignment(),
@@ -386,12 +390,12 @@ def generate_char():
                  'canu': '',
                  'bonusatt': '',
                  'bonusdist': '',
-                 'for': sum(dice.roll('3d6')),
-                 'int': sum(dice.roll('3d6')),
-                 'sag': sum(dice.roll('3d6')),
-                 'dex': sum(dice.roll('3d6')),
-                 'con': sum(dice.roll('3d6')),
-                 'cha': sum(dice.roll('3d6')),
+                 'for': roll_attribute(is_4d6dl),
+                 'int': roll_attribute(is_4d6dl),
+                 'sag': roll_attribute(is_4d6dl),
+                 'dex': roll_attribute(is_4d6dl),
+                 'con': roll_attribute(is_4d6dl),
+                 'cha': roll_attribute(is_4d6dl),
                  'forb': '',
                  'intb': '',
                  'sagb': '',
