@@ -19,8 +19,13 @@ def generate():
 
 
 @router.get("/ose/json")
-def generate():
-    character = generate_char()
+def generate(char_class: ose_classes = None, is_4d6dl: bool = False):
+
+    character = generate_char(is_4d6dl)
+    if char_class:
+        while char_class.value != character['classe']:
+            character = generate_char(is_4d6dl)
+
     return character
 
 
