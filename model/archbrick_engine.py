@@ -86,37 +86,11 @@ class ArchbrickEngine:
 
     def _step_3_extend_ocean(self, grid_map, sides_with_ocean):
         print('step3')
-        if not sides_with_ocean:
-            return
-        if 1 in sides_with_ocean:
-            for hex in grid_map[:, 1]:
-                self.chance_to_be(grid_map, hex, TerrainType.ocean, 3)
-        if 3 in sides_with_ocean:
-            for hex in grid_map[:, -2]:
-                self.chance_to_be(grid_map, hex, TerrainType.ocean, 3)
-        if 2 in sides_with_ocean:
-            for hex in grid_map[-2, :]:
-                self.chance_to_be(grid_map, hex, TerrainType.ocean, 3)
-        if 4 in sides_with_ocean:
-            for hex in grid_map[1, :]:
-                self.chance_to_be(grid_map, hex, TerrainType.ocean, 3)
+        self._extend_ocean_ocean(grid_map, sides_with_ocean,1, -2, 3)
 
     def _step_4_extend_secondary_ocean(self, grid_map, sides_with_ocean):
         print('step4')
-        if not sides_with_ocean:
-            return
-        if 1 in sides_with_ocean:
-            for hex in grid_map[:, 2]:
-                self.chance_to_be(grid_map, hex, TerrainType.ocean, 2)
-        if 3 in sides_with_ocean:
-            for hex in grid_map[:, -3]:
-                self.chance_to_be(grid_map, hex, TerrainType.ocean, 2)
-        if 2 in sides_with_ocean:
-            for hex in grid_map[-3, :]:
-                self.chance_to_be(grid_map, hex, TerrainType.ocean, 2)
-        if 4 in sides_with_ocean:
-            for hex in grid_map[2, :]:
-                self.chance_to_be(grid_map, hex, TerrainType.ocean, 2)
+        self._extend_ocean_ocean(grid_map, sides_with_ocean, 2, -3, 2)
 
     def chance_to_be(self, grid_map, hex: Hex, terrain: TerrainType, x_chance: int):
         if self._is_near(hex, terrain, grid_map) and self._x_chance_in_6(x_chance) and not hex.is_done:
@@ -183,6 +157,23 @@ class ArchbrickEngine:
 
     def _x_chance_in_6(self, x_chance: int):
         return dice.roll("1d6").pop() <= x_chance
+
+    def _extend_ocean_ocean(self, grid_map, sides_with_ocean, index_1: int, index_2: int, chance: int):
+        print('step4')
+        if not sides_with_ocean:
+            return
+        if 1 in sides_with_ocean:
+            for hex in grid_map[:, index_1]:
+                self.chance_to_be(grid_map, hex, TerrainType.ocean, chance)
+        if 3 in sides_with_ocean:
+            for hex in grid_map[:, index_2]:
+                self.chance_to_be(grid_map, hex, TerrainType.ocean, chance)
+        if 2 in sides_with_ocean:
+            for hex in grid_map[index_2, :]:
+                self.chance_to_be(grid_map, hex, TerrainType.ocean, chance)
+        if 4 in sides_with_ocean:
+            for hex in grid_map[index_1, :]:
+                self.chance_to_be(grid_map, hex, TerrainType.ocean, chance)
 
 
 
