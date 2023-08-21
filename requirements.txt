@@ -1,9 +1,11 @@
-dice
-fastapi
-uvicorn
+dice~=4.0.0
+fastapi~=0.101.1
+uvicorn~=0.23.2
 httptools
-pdfrw
+pdfrw~=0.4
 aiofiles
-requests
+requests~=2.31.0
 jinja2
-fillpdf
+fillpdf~=0.7.2
+starlette~=0.27.0
+numpy~=1.25.2

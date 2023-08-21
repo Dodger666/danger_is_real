@@ -7,9 +7,12 @@ import numpy as np
 class TerrainType(str, Enum):
     plain_grass = "light-green grass",
     plain_dry = "plain_dry",
-    hill = "hill",
-    hill_forest = "hill_forest",
-    mountain = "mountain",
+    hill = "green hill",
+    hill2 = "green hill",
+    hill_forest = "forest-hill",
+    big_mountain = "rock mountains",
+    mountain = "rock mountain",
+    mountain2 = "rock mountain",
     mountain_forest = "mountain_forest",
     ocean = "ocean",
     swamp = "swamp",
@@ -46,6 +49,10 @@ class ArchbrickEngine:
         self._step_3_extend_ocean(grid_map, sides_with_ocean)
         self._step_4_extend_secondary_ocean(grid_map, sides_with_ocean)
         self._step_5_place_mountains(grid_map)
+        self._step_6_extend_mountains(grid_map)
+        self._step_7_extend_mountains(grid_map)
+        self._step_8_extend_mountains(grid_map)
+        self._step_9_extend_hills(grid_map)
 
         # final formatting for text-mapper
         for col in grid_map:
@@ -97,14 +104,45 @@ class ArchbrickEngine:
         print(f'there are {nb_mountains} mountains')
         for mountain in range(0, nb_mountains):
             a_hex = grid_map[dice.roll(f'1d{self.width}').pop()-1, dice.roll(f'1d{self.height}').pop()-1]
-            while a_hex.terrain in [TerrainType.ocean, TerrainType.mountain]:
+            while a_hex.terrain in [TerrainType.ocean, TerrainType.big_mountain]:
                 a_hex = grid_map[dice.roll(f'1d{self.width}').pop()-1, dice.roll(f'1d{self.height}').pop()-1]
-            a_hex.terrain = TerrainType.mountain
+            a_hex.terrain = TerrainType.big_mountain
 
-    def _chance_to_be(self, grid_map, hex: Hex, terrain: TerrainType, x_chance: int):
-        if self._is_near(hex, terrain, grid_map) and self._x_chance_in_6(x_chance) and not hex.is_done:
-            hex.terrain = terrain
-            print(f"hex:{hex.col + 1},{hex.row + 1} is ocean")
+    def _step_6_extend_mountains(self, grid_map: np.ndarray):
+        self._extend_moutains(grid_map, TerrainType.big_mountain, TerrainType.mountain, 4)
+
+    def _step_7_extend_mountains(self, grid_map: np.ndarray):
+        self._extend_moutains(grid_map, TerrainType.mountain, TerrainType.mountain2, 2)
+
+    def _step_8_extend_mountains(self, grid_map: np.ndarray):
+        for col in grid_map:
+            for hex in col:
+                if hex.terrain == TerrainType.mountain:
+                    hex.terrain = TerrainType.big_mountain
+
+        self._extend_moutains(grid_map, TerrainType.big_mountain, TerrainType.hill, 6)
+
+    def _step_9_extend_hills(self, grid_map: np.ndarray):
+        for col in grid_map:
+            for hex in col:
+                hex.is_done = False
+
+        for col in grid_map:
+            for hex in col:
+                if hex.terrain != TerrainType.plain_grass: continue
+                self._chance_to_be_if_near(grid_map, hex, TerrainType.hill, TerrainType.hill2, 3)
+
+
+
+    def _chance_to_be_if_near(self, grid_map, hex: Hex, near_terrain: TerrainType, to_be_terrain: TerrainType, x_chance: int, else_terrain: TerrainType = None):
+        if self._is_near(hex, near_terrain, grid_map) and not hex.is_done:
+            if self._x_chance_in_6(x_chance):
+                hex.terrain = to_be_terrain
+                print(f"hex:{hex.col + 1},{hex.row + 1} is {to_be_terrain}")
+            else:
+                if else_terrain:
+                    hex.terrain = else_terrain
+                    print(f"hex:{hex.col + 1},{hex.row + 1} is {else_terrain}")
         hex.is_done = True
 
     def _is_near(self, hex: Hex, terrain_type: TerrainType, gridmap):
@@ -173,16 +211,26 @@ class ArchbrickEngine:
             return
         if 1 in sides_with_ocean:
             for hex in grid_map[:, index_1]:
-                self._chance_to_be(grid_map, hex, TerrainType.ocean, chance)
+                self._chance_to_be_if_near(grid_map, hex, TerrainType.ocean, TerrainType.ocean, chance)
         if 3 in sides_with_ocean:
             for hex in grid_map[:, index_2]:
-                self._chance_to_be(grid_map, hex, TerrainType.ocean, chance)
+                self._chance_to_be_if_near(grid_map, hex, TerrainType.ocean, TerrainType.ocean, chance)
         if 2 in sides_with_ocean:
             for hex in grid_map[index_2, :]:
-                self._chance_to_be(grid_map, hex, TerrainType.ocean, chance)
+                self._chance_to_be_if_near(grid_map, hex, TerrainType.ocean, TerrainType.ocean, chance)
         if 4 in sides_with_ocean:
             for hex in grid_map[index_1, :]:
-                self._chance_to_be(grid_map, hex, TerrainType.ocean, chance)
+                self._chance_to_be_if_near(grid_map, hex, TerrainType.ocean, TerrainType.ocean, chance)
+
+    def _extend_moutains(self, grid_map, terrain_near: TerrainType, terrain_to_be: TerrainType, chance: int):
+        for col in grid_map:
+            for hex in col:
+                hex.is_done = False
+
+        for col in grid_map:
+            for hex in col:
+                if hex.terrain != TerrainType.plain_grass: continue
+                self._chance_to_be_if_near(grid_map, hex, terrain_near, terrain_to_be, chance, TerrainType.hill)
 
 
 
