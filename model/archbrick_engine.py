@@ -11,12 +11,16 @@ class TerrainType(str, Enum):
     hill2 = "green hill",
     hill_forest = "forest-hill",
     big_mountain = "rock mountains",
-    mountain = "rock mountain",
+    mountain = "rock mountains",
     mountain2 = "rock mountain",
     mountain_forest = "mountain_forest",
     ocean = "ocean",
     swamp = "swamp",
     forest = "forest"
+
+class RiverType(str, Enum):
+    normal= "normal",
+    joining_two = "joining_two"
 
 
 class Hex:
@@ -40,6 +44,7 @@ class ArchbrickEngine:
         self.icon_def = 'include https://campaignwiki.org/contrib/gnomeyland.txt'
         self.grid = {}
         self.ocean_sides = None
+        self.land_sides = None
 
     def generate_map(self):
 
@@ -54,6 +59,7 @@ class ArchbrickEngine:
         self._step_7_extend_mountains(grid_map)
         self._step_8_extend_mountains(grid_map)
         self._step_9_extend_hills(grid_map)
+        self._step_10_init_river(grid_map)
 
         # final formatting for text-mapper
         for col in grid_map:
@@ -102,6 +108,7 @@ class ArchbrickEngine:
         self._extend_ocean_ocean(grid_map, sides_with_ocean, 2, -3, 2)
 
     def _step_5_place_mountains(self, grid_map):
+        print('step5')
         nb_mountains = sum(dice.roll(f'{round(self.height*self.width / 100)}d6'))
         print(f'there are {nb_mountains} mountains')
         for mountain in range(0, nb_mountains):
@@ -111,12 +118,15 @@ class ArchbrickEngine:
             a_hex.terrain = TerrainType.big_mountain
 
     def _step_6_extend_mountains(self, grid_map: np.ndarray):
+        print('step6')
         self._extend_moutains(grid_map, TerrainType.big_mountain, TerrainType.mountain, 4)
 
     def _step_7_extend_mountains(self, grid_map: np.ndarray):
+        print('step7')
         self._extend_moutains(grid_map, TerrainType.mountain, TerrainType.mountain2, 2)
 
     def _step_8_extend_mountains(self, grid_map: np.ndarray):
+        print('step8')
         for col in grid_map:
             for hex in col:
                 if hex.terrain == TerrainType.mountain:
@@ -125,6 +135,7 @@ class ArchbrickEngine:
         self._extend_moutains(grid_map, TerrainType.big_mountain, TerrainType.hill, 6)
 
     def _step_9_extend_hills(self, grid_map: np.ndarray):
+        print('step9')
         for col in grid_map:
             for hex in col:
                 hex.is_done = False
@@ -134,6 +145,25 @@ class ArchbrickEngine:
                 if hex.terrain != TerrainType.plain_grass: continue
                 self._chance_to_be_if_near(grid_map, hex, TerrainType.hill, TerrainType.hill2, 3)
 
+    def _step_10_init_river(self, grid_map: np.ndarray):
+        print('step10')
+        nb_of_rolls = round(self.height * self.width / 100)
+        rivers = []
+
+        for roll in range(0, nb_of_rolls):
+            roll = dice.roll("1d6").pop()
+            if roll == 1:
+                continue
+            if roll in [2, 3, 4]:
+                rivers.append(RiverType.normal)
+            if roll == 5:
+                rivers.append(RiverType.normal)
+                rivers.append(RiverType.normal)
+            if roll == 6:
+                rivers.append(RiverType.joining_two)
+        print('rivers:', rivers)
+
+        self.land_sides = np.setdiff1d([1, 2, 3, 4], self.ocean_sides)
 
 
     def _chance_to_be_if_near(self, grid_map, hex: Hex, near_terrain: TerrainType, to_be_terrain: TerrainType, x_chance: int, else_terrain: TerrainType = None):
