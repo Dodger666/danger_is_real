@@ -39,6 +39,7 @@ class ArchbrickEngine:
         self.hex_flower = {}
         self.icon_def = 'include https://campaignwiki.org/contrib/gnomeyland.txt'
         self.grid = {}
+        self.ocean_sides = None
 
     def generate_map(self):
 
@@ -75,6 +76,7 @@ class ArchbrickEngine:
         if nb_side < 1:
             return
         sides_has_ocean = random.sample(range(1, 5), nb_side)
+        self.ocean_sides = sides_has_ocean
         print('shore sides:', sides_has_ocean)
         for side in sides_has_ocean:
             if side == 1:
