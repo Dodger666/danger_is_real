@@ -18,8 +18,9 @@ class TerrainType(str, Enum):
     swamp = "swamp",
     forest = "forest"
 
+
 class RiverType(str, Enum):
-    normal= "normal",
+    normal = "normal",
     joining_two = "joining_two"
 
 
@@ -36,13 +37,16 @@ class Hex:
         self.q = 0
         self.r = 0
         self.s = 0
+
         self.terrain_height = int(1)
 
-class River:
-    def __int__(self, hex_start: Hex, hex_end: Hex, river_type: RiverType):
+
+class RiverSpec:
+    def __init__(self, hex_start, hex_end, river_type):
         self.hex_start = hex_start
         self.hex_end = hex_end
         self.river_type = river_type
+
 
 class ArchbrickEngine:
     def __init__(self, width: int, height: int):
@@ -53,7 +57,7 @@ class ArchbrickEngine:
         self.grid = {}
         self.ocean_sides = None
         self.land_sides = None
-        self.rivers: [River] = []
+        self.rivers: [RiverSpec] = []
 
     def generate_map(self):
 
@@ -84,7 +88,7 @@ class ArchbrickEngine:
             r = hex.row - (hex.col - (hex.col & 1)) / 2
             hex.q = int(q)
             hex.r = int(r)
-            hex.s = int(-q-r)
+            hex.s = int(-q - r)
 
         h = range(0, self.height)
         w = range(0, self.width)
@@ -96,7 +100,7 @@ class ArchbrickEngine:
                 offset_to_cube(current_hex)
 
     def _step_2_ocean(self, grid_map):
-        nb_side = dice.roll("1d6").pop()-2
+        nb_side = dice.roll("1d6").pop() - 2
         if nb_side < 1:
             return
         sides_has_ocean = random.sample(range(1, 5), nb_side)
@@ -119,7 +123,7 @@ class ArchbrickEngine:
 
     def _step_3_extend_ocean(self, grid_map, sides_with_ocean):
         print('step3')
-        self._extend_ocean_ocean(grid_map, sides_with_ocean,1, -2, 3)
+        self._extend_ocean_ocean(grid_map, sides_with_ocean, 1, -2, 3)
 
     def _step_4_extend_secondary_ocean(self, grid_map, sides_with_ocean):
         print('step4')
@@ -127,12 +131,12 @@ class ArchbrickEngine:
 
     def _step_5_place_mountains(self, grid_map):
         print('step5')
-        nb_mountains = sum(dice.roll(f'{round(self.height*self.width / 100)}d6'))
+        nb_mountains = sum(dice.roll(f'{round(self.height * self.width / 100)}d6'))
         print(f'there are {nb_mountains} mountains')
         for mountain in range(0, nb_mountains):
-            a_hex = grid_map[dice.roll(f'1d{self.width}').pop()-1, dice.roll(f'1d{self.height}').pop()-1]
+            a_hex = grid_map[dice.roll(f'1d{self.width}').pop() - 1, dice.roll(f'1d{self.height}').pop() - 1]
             while a_hex.terrain in [TerrainType.ocean, TerrainType.big_mountain]:
-                a_hex = grid_map[dice.roll(f'1d{self.width}').pop()-1, dice.roll(f'1d{self.height}').pop()-1]
+                a_hex = grid_map[dice.roll(f'1d{self.width}').pop() - 1, dice.roll(f'1d{self.height}').pop() - 1]
             a_hex.terrain = TerrainType.big_mountain
 
     def _step_6_extend_mountains(self, grid_map: np.ndarray):
@@ -173,18 +177,21 @@ class ArchbrickEngine:
             if roll == 1:
                 continue
             if roll in [2, 3, 4]:
-                rivers.append(RiverType.normal)
+                a_river = RiverSpec(hex_start=None, hex_end=None, river_type=RiverType.normal)
+                rivers.append(a_river)
             if roll == 5:
-                rivers.append(RiverType.normal)
-                rivers.append(RiverType.normal)
+                a_river = RiverSpec(hex_start=None, hex_end=None, river_type=RiverType.normal)
+                b_river = RiverSpec(hex_start=None, hex_end=None, river_type=RiverType.normal)
+                rivers.append(a_river)
+                rivers.append(b_river)
             if roll == 6:
-                rivers.append(RiverType.joining_two)
+                a_river = RiverSpec(hex_start=None, hex_end=None, river_type=RiverType.joining_two)
+                rivers.append(a_river)
         print('rivers:', rivers)
 
         self.land_sides = np.setdiff1d([1, 2, 3, 4], self.ocean_sides)
         for river in rivers:
-            self._define_river_specs(river)
-
+            self._define_river_specs(river, grid_map)
 
         # set terrain height
         for col in grid_map:
@@ -199,12 +206,10 @@ class ArchbrickEngine:
                     hex.terrain_height = 3
                     continue
                 hex.terrain_height = 1
+        print('stop')
 
-
-
-
-
-    def _chance_to_be_if_near(self, grid_map, hex: Hex, near_terrain: TerrainType, to_be_terrain: TerrainType, x_chance: int, else_terrain: TerrainType = None):
+    def _chance_to_be_if_near(self, grid_map, hex: Hex, near_terrain: TerrainType, to_be_terrain: TerrainType,
+                              x_chance: int, else_terrain: TerrainType = None):
         if self._is_near(hex, near_terrain, grid_map) and not hex.is_done:
             if self._x_chance_in_6(x_chance):
                 hex.terrain = to_be_terrain
@@ -217,7 +222,7 @@ class ArchbrickEngine:
 
     def _is_near(self, hex: Hex, terrain_type: TerrainType, gridmap):
 
-        def is_out_of_bounds(col: int, row:int):
+        def is_out_of_bounds(col: int, row: int):
             if col < 0 or col >= self.width:
                 return True
             if row < 0 or row >= self.height:
@@ -227,7 +232,7 @@ class ArchbrickEngine:
         def is_even_col(col: int):
             return (col % 2) == 0
 
-        def check_one_near_hex(hex: Hex, gridmap, col_offset:int, row_offset:int, terrain_type: TerrainType):
+        def check_one_near_hex(hex: Hex, gridmap, col_offset: int, row_offset: int, terrain_type: TerrainType):
             if not is_out_of_bounds(hex.col + col_offset, hex.row + row_offset):
                 hex_to_check: Hex = gridmap[hex.col + col_offset, hex.row + row_offset]
                 if hex_to_check.terrain == terrain_type:
@@ -302,11 +307,33 @@ class ArchbrickEngine:
                 if hex.terrain != TerrainType.plain_grass: continue
                 self._chance_to_be_if_near(grid_map, hex, terrain_near, terrain_to_be, chance, TerrainType.hill)
 
-    def _define_river_specs(self, river_type: RiverType):
-        return None
+    def _define_river_specs(self, river: RiverSpec, grid_map):
+        if len(self.land_sides) > 0:
+            if self._x_chance_in_6(3):
+                river.hex_start = self._get_random_hex_of_type([TerrainType.big_mountain], grid_map)
+            else:
+                river.hex_start = self._get_random_hex_from_edge(grid_map, self.land_sides)
+        else:
+            river.hex_start = self._get_random_hex_of_type([TerrainType.big_mountain], grid_map)
 
+        if len(self.ocean_sides) > 0:
+            river.hex_end = self._get_random_hex_from_edge(grid_map, self.ocean_sides)
+        else:
+            river.hex_end = self._get_random_hex_from_edge(grid_map, self.land_sides)
 
+    def _get_random_hex_of_type(self, terrains: [TerrainType], grid_map):
+        a_hex = grid_map[dice.roll(f'1d{self.width}').pop() - 1, dice.roll(f'1d{self.height}').pop() - 1]
+        while a_hex.terrain in terrains:
+            a_hex = grid_map[dice.roll(f'1d{self.width}').pop() - 1, dice.roll(f'1d{self.height}').pop() - 1]
+        return a_hex
 
-
-
-
+    def _get_random_hex_from_edge(self, grid_map, sides: []):
+        side = random.choice(sides)
+        if side == 1:
+            return random.choice(grid_map[:, 0])
+        if side == 3:
+            return random.choice(grid_map[:, -1])
+        if side == 2:
+            return random.choice(grid_map[-1, :])
+        if side == 4:
+            return random.choice(grid_map[0, :])
