@@ -12,7 +12,7 @@ class TerrainType(str, Enum):
     hill_forest = "forest-hill",
     big_mountain = "rock mountains",
     mountain = "rock mountains",
-    mountain2 = "rock mountain",
+    mountain2 = "rock mountains",
     mountain_forest = "mountain_forest",
     ocean = "ocean",
     swamp = "swamp",
@@ -24,7 +24,6 @@ class RiverType(str, Enum):
 
 
 class Hex:
-
     def __init__(self, col: int, row: int, terrain: TerrainType = TerrainType.plain_grass, is_dry: bool = False,
                  has_river: bool = False, is_done: bool = False):
         self.is_done = is_done
@@ -34,7 +33,16 @@ class Hex:
         self.col = col
         self.row = row
         self.text_mapper = None
+        self.q = 0
+        self.r = 0
+        self.s = 0
+        self.terrain_height = int(1)
 
+class River:
+    def __int__(self, hex_start: Hex, hex_end: Hex, river_type: RiverType):
+        self.hex_start = hex_start
+        self.hex_end = hex_end
+        self.river_type = river_type
 
 class ArchbrickEngine:
     def __init__(self, width: int, height: int):
@@ -45,6 +53,7 @@ class ArchbrickEngine:
         self.grid = {}
         self.ocean_sides = None
         self.land_sides = None
+        self.rivers: [River] = []
 
     def generate_map(self):
 
@@ -64,11 +73,19 @@ class ArchbrickEngine:
         # final formatting for text-mapper
         for col in grid_map:
             for hex in col:
-                text_mapper = text_mapper + f'{hex.col + 1:02}{hex.row + 1:02} {hex.terrain.value}' + '\n'
+                text_mapper = text_mapper + f'{hex.col + 1:02}{hex.row + 1:02} {hex.terrain.value} \"h= {hex.terrain_height} qrs:{hex.q}.{hex.r}.{hex.s}\"' + '\n'
 
         return text_mapper + self.icon_def
 
     def _step_1_init_map(self, grid_map):
+
+        def offset_to_cube(hex: Hex):
+            q = hex.col
+            r = hex.row - (hex.col - (hex.col & 1)) / 2
+            hex.q = int(q)
+            hex.r = int(r)
+            hex.s = int(-q-r)
+
         h = range(0, self.height)
         w = range(0, self.width)
         for col in w:
@@ -76,6 +93,7 @@ class ArchbrickEngine:
                 current_hex = Hex(col=col, row=row)
                 current_hex.text_mapper = f'{col + 1:02}{row + 1:02} {current_hex.terrain.value}'
                 grid_map[col, row] = current_hex
+                offset_to_cube(current_hex)
 
     def _step_2_ocean(self, grid_map):
         nb_side = dice.roll("1d6").pop()-2
@@ -164,6 +182,26 @@ class ArchbrickEngine:
         print('rivers:', rivers)
 
         self.land_sides = np.setdiff1d([1, 2, 3, 4], self.ocean_sides)
+        for river in rivers:
+            self._define_river_specs(river)
+
+
+        # set terrain height
+        for col in grid_map:
+            for hex in col:
+                if hex.terrain == TerrainType.ocean:
+                    hex.terrain_height = 0
+                    continue
+                if hex.terrain in [TerrainType.hill, TerrainType.hill2]:
+                    hex.terrain_height = 2
+                    continue
+                if hex.terrain in [TerrainType.big_mountain, TerrainType.mountain, TerrainType.mountain2]:
+                    hex.terrain_height = 3
+                    continue
+                hex.terrain_height = 1
+
+
+
 
 
     def _chance_to_be_if_near(self, grid_map, hex: Hex, near_terrain: TerrainType, to_be_terrain: TerrainType, x_chance: int, else_terrain: TerrainType = None):
@@ -263,6 +301,9 @@ class ArchbrickEngine:
             for hex in col:
                 if hex.terrain != TerrainType.plain_grass: continue
                 self._chance_to_be_if_near(grid_map, hex, terrain_near, terrain_to_be, chance, TerrainType.hill)
+
+    def _define_river_specs(self, river_type: RiverType):
+        return None
 
 
 
