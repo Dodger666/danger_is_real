@@ -37,8 +37,14 @@ class Hex:
         self.q = 0
         self.r = 0
         self.s = 0
+        self.g = 0
+        self.h = 0
 
         self.terrain_height = int(1)
+        self.adj_hexes = []
+
+    def f(self):
+        return self.g + self.h
 
 
 class RiverSpec:
