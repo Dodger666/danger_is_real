@@ -1,4 +1,5 @@
-from model.archbrick_engine import Hex
+from model.archbrick_model import Hex
+
 
 class AStarPathfinding:
 
@@ -19,52 +20,39 @@ class AStarPathfinding:
         self.open_path_tile.append(current_hex)
 
         while len(self.open_path_tile) != 0:
-            pass
             # // Sorting the open list to get the tile with the lowest F.
             self.open_path_tile = sorted(self.open_path_tile, key=lambda hex: (hex.f(), -hex.g))
             current_hex = self.open_path_tile[0]
-            #
-            # // Removing the current tile from the open list and adding it to the closed list.
-            # openPathTiles.Remove(currentTile);
-            # closedPathTiles.Add(currentTile);
-            #
-            # int g = currentTile.g + 1;
-            #
-            # // If there is a target tile in the closed list, we have found a path.
-            # if (closedPathTiles.Contains(endPoint))
-            # {
-            #     break;
-            # }
-            #
-            # // Investigating each adjacent tile of the current tile.
-            # foreach (Tile adjacentTile in currentTile.adjacentTiles)
-            # {
-            #     // Ignore not walkable adjacent tiles.
-            #     if (adjacentTile.isObstacle)
-            #     {
-            #         continue;
-            #     }
-            #
-            #     // Ignore the tile if it's already in the closed list.
-            #     if (closedPathTiles.Contains(adjacentTile))
-            #     {
-            #         continue;
-            #     }
-            #
-            #     // If it's not in the open list - add it and compute G and H.
-            #     if (!(openPathTiles.Contains(adjacentTile)))
-            #     {
-            #         adjacentTile.g = g;
-            #         adjacentTile.h = GetEstimatedPathCost(adjacentTile.position, endPoint.position);
-            #         openPathTiles.Add(adjacentTile);
-            #     }
-            #     // Otherwise check if using current G we can get a lower value of F, if so update it's value.
-            #     else if (adjacentTile.F > g + adjacentTile.h)
-            #     {
-            #         adjacentTile.g = g;
-            #     }
-            # }
 
+            # Removing the current tile from the open list and adding it to the closed list.
+            self.open_path_tile = [hex for hex in self.open_path_tile if current_hex.q != hex.q
+                                   and current_hex.r != hex.r and current_hex.s != hex.s]
+            self.closed_path_tiles.append(current_hex)
+
+            g = current_hex.g + 1
+
+            if self._is_hex_contained(self.closed_path_tiles, hex_end):
+                break
+
+            # Investigating each adjacent tile of the current tile.
+            # foreach (Tile adjacentTile in currentTile.adjacentTiles)
+            for adj_hex in current_hex.adj_hexes:
+                # Ignore not walkable adjacent tiles.
+                if adj_hex.terrain_height > current_hex.terrain_height:
+                    continue
+
+                # Ignore the tile if it's already in the closed list.
+                if self._is_hex_contained(self.closed_path_tiles, adj_hex):
+                    continue
+
+                # If it's not in the open list - add it and compute G and H.
+                if not self._is_hex_contained(self.open_path_tile, adj_hex):
+                    adj_hex.g = g
+                    adj_hex.h = self._get_estimated_path_cost(adj_hex, hex_end)
+                    self.open_path_tile.append(adj_hex)
+                    # Otherwise check if using current G we can get a lower value of F, if so update it's value.
+                elif adj_hex.f() > g + adj_hex.h:
+                    adj_hex.g = g
 
         final_path_hexes = []
 
