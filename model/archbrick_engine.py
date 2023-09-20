@@ -1,3 +1,4 @@
+import math
 import random
 import dice
 import numpy as np
@@ -100,7 +101,7 @@ class ArchbrickEngine:
 
     def _step_5_place_mountains(self, grid_map):
         print('step5')
-        nb_mountains = sum(dice.roll(f'{round(self.height * self.width / 200)}d6'))
+        nb_mountains = sum(dice.roll(f'{math.ceil(self.height * self.width / 200)}d6'))
         print(f'there are {nb_mountains} mountains')
         for mountain in range(0, nb_mountains):
             a_hex = grid_map[dice.roll(f'1d{self.width}').pop() - 1, dice.roll(f'1d{self.height}').pop() - 1]
