@@ -10,15 +10,15 @@ from model.ose_char_class import ose_classes
 router = APIRouter()
 
 
-@router.get("/ose")
+@router.get("/swc")
 def generate():
     this_dir = os.path.abspath(os.path.dirname(__file__))
     static_folder = os.path.join(this_dir, 'static')
-    full_path = os.path.join(static_folder, 'index.html')
+    full_path = os.path.join(static_folder, 'swc_index.html')
     return FileResponse(full_path)
 
 
-@router.get("/ose/json")
+@router.get("/swc/json")
 def generate(char_class: ose_classes = None, is_4d6dl: bool = False):
 
     character = generate_char(is_4d6dl)
@@ -29,11 +29,11 @@ def generate(char_class: ose_classes = None, is_4d6dl: bool = False):
     return character
 
 
-@router.get("/ose/pdf")
+@router.get("/swc/pdf")
 def generate_pdf(background_tasks: BackgroundTasks, char_class: ose_classes = None, is_4d6dl: bool = False):
     this_dir = os.path.abspath(os.path.dirname(__file__))
     static_folder = os.path.join(this_dir, 'static')
-    full_path = os.path.join(static_folder, 'OSE_FdP.pdf')
+    full_path = os.path.join(static_folder, 'SW_Character_Sheet_2023.pdf')
     # fillpdfs.get_form_fields(full_path)
 
     data = generate_char(is_4d6dl)
@@ -45,7 +45,7 @@ def generate_pdf(background_tasks: BackgroundTasks, char_class: ose_classes = No
     buffer = io.BytesIO()
     fillpdfs.write_fillable_pdf(full_path, buffer, data, flatten=False)
     background_tasks.add_task(buffer.close)
-    headers = {'Content-Disposition': f'inline; filename=OSE_{data["pj"]}_{data["classe"]}.pdf'}
+    headers = {'Content-Disposition': f'inline; filename=swc_{data["pj"]}_{data["classe"]}.pdf'}
 
     return Response(buffer.getvalue(), headers=headers, media_type='application/pdf')
 

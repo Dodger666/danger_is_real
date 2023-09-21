@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Character generator for Swords & Wizardry Complete</title>
+    <script>
+    function get_rolltype() {
+            return document.querySelector('input[name="roll"]:checked').value;
+        }
+    </script>
+</head>
+<body>
+<p>&nbsp;</p>
+
+<hr />
+<h1 style="text-align:center"><span style="font-family:Courier New,Courier,monospace"><span style="font-size:36px"><strong>Character generator for Swords & Wizardry Complete&nbsp</strong></span></span></h1>
+
+<hr />
+<p style="text-align:center"><img alt="" src="https://64.media.tumblr.com/60c2c37de1b6cb95156b3bd1d8ae6c4d/8caf04c65ce3e32f-6a/s1280x1920/7b835546ac6e75fe33118232f74a4f0253ed3b99.jpg" style="height:384px; width:600px" /></p>
+
+<p style="text-align:center"><span style="font-size:26px;color:black"><strong><span style="font-family:Courier New,Courier,monospace"><a href="/swc/pdf" target="_blank">Nouveau Personnage (comme les vrais: 3d6 et classe au hasard)</a></span></strong></span></p>
+<hr>
+<p style="text-align:center"><span style="font-size:18px"><strong><span style="font-family:Courier New,Courier,monospace">
+
+    Type de jets
+      <input type="radio" id="Choice1" name="roll" value="False" checked/>
+      <label for="Choice1">3d6</label>
+      <input type="radio" id="Choice2" name="roll" value="True" />
+      <label for="Choice2">3 meilleurs sur 4d6</label>
+</span></strong></span></p>
+
+
+<p style="text-align:center"><span style="font-size:18px;color:black"><strong><span style="font-family:Courier New,Courier,monospace;color:black">
+    <a href="/ose/pdf?char_class=Clerc" target="_blank" onclick="this.href=this.href+'&is_4d6dl='+get_rolltype()">Clerc</a>
+    <a href="/ose/pdf?char_class=Elfe" target="_blank" onclick="this.href=this.href+'&is_4d6dl='+get_rolltype()">Elfe</a>
+    <a href="/ose/pdf?char_class=Guerrier" target="_blank" onclick="this.href=this.href+'&is_4d6dl='+get_rolltype()">Guerrier</a>
+    <a href="/ose/pdf?char_class=Hobbit" target="_blank" onclick="this.href=this.href+'&is_4d6dl='+get_rolltype()">Hobbit</a>
+    <a href="/ose/pdf?char_class=Magicien" target="_blank" onclick="this.href=this.href+'&is_4d6dl='+get_rolltype()">Magicien</a>
+    <a href="/ose/pdf?char_class=Nain" target="_blank" onclick="this.href=this.href+'&is_4d6dl='+get_rolltype()">Nain</a>
+    <a href="/ose/pdf?char_class=Voleur" target="_blank" onclick="this.href=this.href+'&is_4d6dl='+get_rolltype()">Voleur</a>
+</span></strong></span></p>
+
+
+<p style="text-align:center"><span style="font-size:26px;color=black"><strong><span style="font-family:Courier New,Courier,monospace"><a href="https://dangerisreal.blogspot.com/"><img alt="" src="https://1.bp.blogspot.com/-kkX3Rfusp2U/YU19xSjanXI/AAAAAAAA41I/r8jSVqItu4AsK1O5vFF1__vbZ_uc0M2-ACLcBGAsYHQ/s201/Danger%2BIs%2BReal.png" style="height:201px; width:200px" /></a></span></strong></span></p>
+</body>
+
+</html>
