@@ -315,5 +315,5 @@ def actual_tradeout(nb_possible):
 
 
 if __name__ == '__main__':
-    #generate_treasure_hoard(3500)
+    generate_treasure_hoard(3500)
     print(table_86_scrolls('1d6'))
