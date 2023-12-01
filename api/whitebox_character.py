@@ -1,4 +1,3 @@
-import json
 import os
 
 from whitebox_helper import generate_char

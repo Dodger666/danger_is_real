@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from api import characters, maps, whitebox_character, names, ose_character, swc_character
+from api import characters, maps, whitebox_character, names, ose_character, swc_character, static
 
 app = FastAPI()
 
@@ -17,6 +17,7 @@ app.include_router(whitebox_character.router, tags=["whitebox_character"])
 app.include_router(ose_character.router, tags=["ose_character"])
 app.include_router(swc_character.router, tags=["swc_character"])
 app.include_router(names.router, tags=["names"])
+app.include_router(static.router, tags=["static"])
 uvicorn.run(app)
 
 
